@@ -1,6 +1,7 @@
 package com.focamacho.sealconfig;
 
 import blue.endless.jankson.Jankson;
+import blue.endless.jankson.JsonElement;
 import blue.endless.jankson.JsonObject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.text.translate.UnicodeUnescaper;
@@ -103,11 +104,31 @@ public class SealConfig {
                 boolean mk = configFile.getParentFile().mkdirs();
                 boolean nf = configFile.createNewFile();
                 configObject = defaults;
-            } else configObject = Jankson.builder().build().load(configFile);
+            } else {
+                configObject = Jankson.builder().build().load(configFile);
 
-            defaults.forEach((string, element) -> {
-                if(!configObject.containsKey(string)) configObject.putDefault(string, element, defaults.getComment(string));
-            });
+                //Verificar se o JSON possui todos os valores padrões, caso não, adicionar os valores faltando.
+                for (Map.Entry<String, JsonElement> entry : defaults.entrySet()) {
+                    if(!configObject.containsKey(entry.getKey())) {
+                        //Criar um novo JsonObject para que os elementos a serem adicionados sejam colocados
+                        //na ordem correta.
+                        JsonObject newObject = defaults.clone();
+
+                        configObject.forEach((key, value) -> {
+                            if(newObject.containsKey(key)) newObject.put(key, value);
+                        });
+
+                        configObject = newObject;
+                        break;
+                    }
+                }
+
+                //Atualizar os comentários em caso deles terem sido adicionados ou
+                //modificados na classe de configuração.
+                for (Map.Entry<String, JsonElement> entry : defaults.entrySet()) {
+                    if(configObject.containsKey(entry.getKey())) configObject.setComment(entry.getKey(), defaults.getComment(entry.getKey()));
+                }
+            }
 
             FileUtils.write(configFile, unicodeUnescaper.translate(configObject.toJson(true, true, 0, 2)), StandardCharsets.UTF_8);
             T config = Jankson.builder().build().fromJson(configObject.toJson(), configClass);
