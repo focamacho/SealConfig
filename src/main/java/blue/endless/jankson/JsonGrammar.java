@@ -98,6 +98,7 @@ public class JsonGrammar {
          */
         public Builder printWhitespace(boolean whitespace) {
             grammar.printWhitespace = whitespace;
+            grammar.newLinesAmount = whitespace ? 1 : 0;
             return this;
         }
 
