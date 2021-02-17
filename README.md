@@ -57,7 +57,7 @@ public class ConfigExample {
     }
     
     public static void saveConfig() {
-        //Para salvar você pode optar por salvar todas as configurações criados usando SealConfig#save.
+        //Para salvar você pode optar por salvar todas as configurações criadas usando SealConfig#save.
         sealConfig.save();
         //ou salvar uma configuração específica passando o objeto dela no método
         sealConfig.save(config);
