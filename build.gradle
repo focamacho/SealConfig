@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+    id "com.github.johnrengelman.shadow" version "6.1.0"
+}
+
+group = 'com.focamacho.sealconfig'
+version = '1.0'
+archivesBaseName = 'SealConfig'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile group: 'commons-io', name: 'commons-io', version: '2.7'
+    compile group: 'org.apache.commons', name: 'commons-text', version: '1.9'
+}
+
+tasks.build.dependsOn(shadowJar)
+
+//Realocar o Apache Commons Text para evitar conflitos
+shadowJar {
+    relocate 'org.apache.commons.text', 'com.focamacho.sealconfig.relocated.org.apache.commons.text'
+}
+
+tasks.shadowJar.configure {
+    classifier = null
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding("UTF-8")
+}
+
+jar.enabled = false
