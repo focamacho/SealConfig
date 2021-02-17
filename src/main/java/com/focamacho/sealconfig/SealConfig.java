@@ -18,10 +18,10 @@ import java.util.logging.Logger;
 @SuppressWarnings({"unused", "deprecation", "unchecked"})
 public class SealConfig {
 
-    private static final Logger logger = Logger.getLogger("SealConfig");
-    private static final UnicodeUnescaper unicodeUnescaper = new UnicodeUnescaper();
+    protected static final Logger logger = Logger.getLogger("SealConfig");
+    protected static final UnicodeUnescaper unicodeUnescaper = new UnicodeUnescaper();
 
-    private final Map<Class<?>, Map<File, Object>> configs = new HashMap<>();
+    protected final Map<Class<?>, Map<File, Object>> configs = new HashMap<>();
 
     /**
      * Construtor inicial.
@@ -67,7 +67,7 @@ public class SealConfig {
         configs.forEach((classe, map) -> map.forEach((file, object) -> {
            if(configObject == object) {
                try {
-                   String toSave = unicodeUnescaper.translate(Jankson.builder().build().load(Jankson.builder().build().toJson(configObject).toJson(true, true, 0)).toJson(true, true, 0));
+                   String toSave = unicodeUnescaper.translate(Jankson.builder().build().load(Jankson.builder().build().toJson(configObject).toJson(true, true, 0)).toJson(true, true, 0, 2));
 
                    if (!file.exists()) {
                        boolean mk = file.getParentFile().mkdirs();
@@ -109,7 +109,7 @@ public class SealConfig {
                 if(!configObject.containsKey(string)) configObject.putDefault(string, element, defaults.getComment(string));
             });
 
-            FileUtils.write(configFile, unicodeUnescaper.translate(configObject.toJson(true, true, 0)), StandardCharsets.UTF_8);
+            FileUtils.write(configFile, unicodeUnescaper.translate(configObject.toJson(true, true, 0, 2)), StandardCharsets.UTF_8);
             T config = Jankson.builder().build().fromJson(configObject.toJson(), configClass);
             Map<File, Object> configs = this.configs.get(configClass);
             if(configs == null) {

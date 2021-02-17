@@ -1,8 +1,6 @@
 # Seal Config
 Seal Config é uma API para criação de arquivos de configuração utilizando [Jankson](https://github.com/falkreon/Jankson).
 
-Esse projeto foi extraído da [Seal Library](https://github.com/Seal-Island/Seal-Library) e modificado para poder ser utilizado separadamente em qualquer projeto.
-
 Para gerar um arquivo de configuração é só criar um novo objeto da classe [SealConfig](https://github.com/Seal-Island/Seal-Config/blob/main/src/main/java/com/focamacho/sealconfig/SealConfig.java) e usar o método getConfig.
 
 ## Exemplo
@@ -10,7 +8,9 @@ Exemplo de criação de configuração utilizando a API.
 
 Classe da configuração:
 ```java
-import blue.endless.jankson.Comment;
+//Para evitar conflitos com as mudanças efetuadas, os pacotes
+//do Jankson foram realocados.
+import com.focamacho.sealconfig.relocated.blue.endless.jankson.Comment;
 
 public class ConfigObject {
 
