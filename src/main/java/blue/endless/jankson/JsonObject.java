@@ -234,6 +234,7 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
             Entry entry = entries.get(i);
 
             if (grammar.printWhitespace) {
+                if(i > 0 && entry.getComment() != null && !entry.getComment().trim().isEmpty()) for(int j = 1; j < grammar.newLinesAmount; j++) w.append('\n');
                 for(int j=0; j<nextDepth; j++) {
                     w.append("\t");
                 }
@@ -265,7 +266,6 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
 
             if (grammar.printWhitespace) {
                 w.append('\n');
-                if(entry.getComment() != null && !entry.getComment().trim().isEmpty()) for(int j = 1; j < grammar.newLinesAmount; j++) w.append('\n');
             }
         }
 
