@@ -7,6 +7,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.text.translate.UnicodeUnescaper;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -106,28 +107,7 @@ public class SealConfig {
                 configObject = defaults;
             } else {
                 configObject = Jankson.builder().build().load(configFile);
-
-                //Verificar se o JSON possui todos os valores padrões, caso não, adicionar os valores faltando.
-                for (Map.Entry<String, JsonElement> entry : defaults.entrySet()) {
-                    if(!configObject.containsKey(entry.getKey())) {
-                        //Criar um novo JsonObject para que os elementos a serem adicionados sejam colocados
-                        //na ordem correta.
-                        JsonObject newObject = defaults.clone();
-
-                        configObject.forEach((key, value) -> {
-                            if(newObject.containsKey(key)) newObject.put(key, value);
-                        });
-
-                        configObject = newObject;
-                        break;
-                    }
-                }
-
-                //Atualizar os comentários em caso deles terem sido adicionados ou
-                //modificados na classe de configuração.
-                for (Map.Entry<String, JsonElement> entry : defaults.entrySet()) {
-                    if(configObject.containsKey(entry.getKey())) configObject.setComment(entry.getKey(), defaults.getComment(entry.getKey()));
-                }
+                configObject = checkValues(defaults, configObject, configClass);
             }
 
             FileUtils.write(configFile, unicodeUnescaper.translate(configObject.toJson(true, true, 0, 2)), StandardCharsets.UTF_8);
@@ -144,6 +124,62 @@ public class SealConfig {
             e.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     * Faz a checagem para que todos os valores padrões
+     * sejam definidos corretamente, além de atualizar os
+     * comentários que foram adicionados ou modificados e
+     * remover os valores que já foram removidos de suas
+     * classes de configuração.
+     *
+     * @param defaultObject o objeto com os valores padrões.
+     * @param actualObject o objeto atual para verificação.
+     * @param configClass a classe do objeto de configuração.
+     * @return um novo objeto com todos os valores padrões definidos,
+     * valores obsoletos removidos e comentários atualizados.
+     */
+    private JsonObject checkValues(JsonObject defaultObject, JsonObject actualObject, Class<?> configClass) {
+        for (Map.Entry<String, JsonElement> entry : defaultObject.entrySet()) {
+            if(!actualObject.containsKey(entry.getKey())) actualObject = applyDefaults(defaultObject, actualObject);
+            //Fazer a verificação se o valor não é um JsonObject com valores que precisam ser verificados também
+            else if(actualObject.get(entry.getKey()) instanceof JsonObject) {
+                try {
+                    Field field = configClass.getDeclaredField(entry.getKey());
+                    if(field.isAnnotationPresent(ConfigObject.class)) {
+                        actualObject.put(entry.getKey(), checkValues((JsonObject) entry.getValue(), actualObject.getObject(entry.getKey()), field.getType()));
+                    }
+                } catch(Exception ignored) {}
+            }
+        }
+
+        //Atualizar os comentários em caso deles terem sido adicionados ou
+        //modificados na classe de configuração.
+        for (Map.Entry<String, JsonElement> entry : defaultObject.entrySet()) {
+            actualObject.setComment(entry.getKey(), defaultObject.getComment(entry.getKey()));
+        }
+
+        return actualObject;
+    }
+
+    /**
+     * Verifica e define os valores padrões que
+     * estão faltando, além de remover os valores
+     * que já foram removidos da classe de configuração.
+     *
+     * @param defaultObject o objeto com os valores padrões.
+     * @param actualObject o objeto atual para verificação.
+     * @return um novo objeto com todos os valores padrões definidos.
+     */
+    private JsonObject applyDefaults(JsonObject defaultObject, JsonObject actualObject) {
+        //Criar um novo JsonObject para que os elementos a serem adicionados sejam colocados
+        //na ordem correta.
+        JsonObject newObject = defaultObject.clone();
+        actualObject.forEach((key, value) -> {
+            if(newObject.containsKey(key)) newObject.put(key, value);
+        });
+
+        return newObject;
     }
 
 }

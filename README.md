@@ -15,7 +15,7 @@ Para gerar um arquivo de configuração é só criar um novo objeto da classe [S
 <dependency>
     <groupId>com.focamacho</groupId>
     <artifactId>sealconfig</artifactId>
-    <version>1.1</version>
+    <version>VERSAO</version>
 </dependency>
 ```
 
@@ -26,9 +26,10 @@ repositories {
 }
 
 dependencies {
-    compile 'com.focamacho:sealconfig:1.1'
+    compile 'com.focamacho:sealconfig:VERSAO'
 }
 ```
+Verifique a última versão disponível nos [releases](https://github.com/Seal-Island/Seal-Config/releases) do GitHub.
 
 ## Exemplo
 Exemplo de criação de configuração utilizando a API.
@@ -39,7 +40,7 @@ Classe da configuração:
 //do Jankson foram realocados.
 import com.focamacho.sealconfig.relocated.blue.endless.jankson.Comment;
 
-public class ConfigObject {
+public class ObjectExample {
 
     //Anotações de comentário do Jankson podem ser utilizados para
     //definir comentários nas configurações.
@@ -48,6 +49,24 @@ public class ConfigObject {
     
     @Comment("Defina aqui qual número é foda.")
     public int numeroFoda = 0;
+    
+    //Você pode definir objetos para serem usados como "categorias"
+    //por meio da anotação @ConfigObject
+    @Comment("Isso aqui é uma categoria :p\n" +
+            "E que tal alguns comentários maiorzinhos?\n" +
+            "Parece bom pra mim!")
+    @ConfigObject
+    public CategoryExample categoria = new CategoryExample();
+    
+    static class CategoryExample {
+        
+        @Comment("Resultado do que?")
+        public int resultado = 20;
+        
+        @Comment("Oi!")
+        public String oi = "olá!";
+        
+    }
 
 }
 ```
@@ -58,13 +77,13 @@ import java.io.File;
 public class ConfigExample {
 
     private static SealConfig sealConfig;
-    public static ConfigObject config;
+    public static ObjectExample config;
     
     public static void loadConfig() {
         //Cria uma instância da Seal Config
         sealConfig = new SealConfig();
         //Cria ou carrega a configuração. O primeiro argumento é o arquivo de configuração, e o segundo a classe da configuração.
-        config = sealConfig.getConfig(new File("./config/ConfigExemplo.json"), ConfigObject.class);
+        config = sealConfig.getConfig(new File("./config/ConfigExemplo.json"), ObjectExample.class);
 
         //Para acessar a config é só utilizar o objeto criado pelo getConfig.
         System.out.println("Meu nome é " + config.meuNome + " e o número mais foda é o " + config.numeroFoda);
@@ -90,5 +109,27 @@ public class ConfigExample {
         sealConfig.save(config);
     }
     
+}
+```
+JSON resultante da classe ObjectExample:
+```json5
+{
+	// Defina seu nome aqui.
+	"meuNome": "Focamacho",
+
+	// Defina aqui qual número é foda.
+	"numeroFoda": 0,
+
+	/* Isso aqui é uma categoria :p
+	   E que tal alguns comentários maiorzinhos?
+	   Parece bom pra mim!
+	*/
+	"categoria": {
+		// Resultado do que?
+		"resultado": 20,
+
+		// Oi!
+		"oi": "olá!"
+	}
 }
 ```
