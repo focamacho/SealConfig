@@ -112,6 +112,20 @@ public class SealConfig {
 
             FileUtils.write(configFile, unicodeUnescaper.translate(configObject.toJson(true, true, 0, 2)), StandardCharsets.UTF_8);
             T config = Jankson.builder().build().fromJson(configObject.toJson(), configClass);
+
+            //Remover valores padrões/de exemplo do Map
+            Field[] fields = config.getClass().getFields();
+            for (Field field : fields) {
+                JsonObject jsonObject = configObject.getObject(field.getName());
+                if(jsonObject == null) continue;
+
+                Object obj = field.get(config);
+                if(field.get(config) instanceof Map) {
+                    Map<String, ?> map = (Map<String, ?>) obj;
+                    map.entrySet().removeIf(entry -> !jsonObject.containsKey(entry.getKey()));
+                }
+            }
+
             Map<File, Object> configs = this.configs.get(configClass);
             if(configs == null) {
                 this.configs.put(configClass, new HashMap<>());
