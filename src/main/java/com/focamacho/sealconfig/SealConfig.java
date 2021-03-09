@@ -113,30 +113,51 @@ public class SealConfig {
             FileUtils.write(configFile, unicodeUnescaper.translate(configObject.toJson(true, true, 0, 2)), StandardCharsets.UTF_8);
             T config = Jankson.builder().build().fromJson(configObject.toJson(), configClass);
 
-            //Remover valores padrões/de exemplo do Map
-            Field[] fields = config.getClass().getFields();
-            for (Field field : fields) {
-                JsonObject jsonObject = configObject.getObject(field.getName());
-                if(jsonObject == null) continue;
-
-                Object obj = field.get(config);
-                if(field.get(config) instanceof Map) {
-                    Map<String, ?> map = (Map<String, ?>) obj;
-                    map.entrySet().removeIf(entry -> !jsonObject.containsKey(entry.getKey()));
-                }
-            }
-
             Map<File, Object> configs = this.configs.get(configClass);
             if(configs == null) {
                 this.configs.put(configClass, new HashMap<>());
                 configs = this.configs.get(configClass);
             }
-            configs.put(configFile, config);
+
+            if(configs.get(configFile) == null) {
+                configs.put(configFile, config);
+            } else {
+                setValues(configs.get(configFile), config);
+            }
+
             return config;
         } catch(Exception e) {
             logger.severe("Erro ao carregar um arquivo de configuração:");
             e.printStackTrace();
             return null;
+        }
+    }
+
+    /**
+     * Define os valores de um objeto para o outro.
+     * Método utilizado quando a configuração é recarregada.
+     *
+     * @param configObject o objeto que terá seus valores
+     *                     sobreescritos com os novos.
+     * @param newObject o objeto com os valores para serem
+     *                  definidos no configObject.
+     */
+    private void setValues(Object configObject, Object newObject) {
+        try {
+            for(Field field : configObject.getClass().getFields()) {
+                for(Field newField : newObject.getClass().getFields()) {
+                    if(field.getName().equalsIgnoreCase(newField.getName())) {
+                        if(field.isAnnotationPresent(ConfigObject.class)) {
+                            setValues(field.get(configObject), newField.get(newObject));
+                        } else {
+                            field.set(configObject, newField.get(newObject));
+                        }
+                    }
+                }
+            }
+        } catch(Exception e) {
+            logger.severe("Erro ao definir os valores em um objeto de configuração:");
+            e.printStackTrace();
         }
     }
 
@@ -194,6 +215,38 @@ public class SealConfig {
         });
 
         return newObject;
+    }
+
+    /**
+     * As vezes é necessário definir algumas opções padrões
+     * em um Map, e quando isso acontece elas permanecem nesse Map
+     * mesmo após terem sido removidas do arquivo de configuração.
+     * Esse método faz a checagem de valores que já não existem
+     * no arquivo e os removem do Map.
+     *
+     * @param config o objeto de configuração.
+     * @param configObject o json do objeto de configuração.
+     */
+    private void removeClassDefaults(Object config, JsonObject configObject) {
+        try {
+            Field[] fields = config.getClass().getFields();
+            for (Field field : fields) {
+                JsonObject jsonObject = configObject.getObject(field.getName());
+                if(jsonObject == null) continue;
+
+                Object obj = field.get(config);
+                if(field.isAnnotationPresent(ConfigObject.class)) {
+                    if(configObject.containsKey(field.getName()))
+                       removeClassDefaults(obj, configObject.getObject(field.getName()));
+                    continue;
+                }
+
+                if(obj instanceof Map) {
+                    Map<String, ?> map = (Map<String, ?>) obj;
+                    map.entrySet().removeIf(entry -> !jsonObject.containsKey(entry.getKey()));
+                }
+            }
+        } catch(Exception ignored) {}
     }
 
 }
