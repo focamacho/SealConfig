@@ -67,21 +67,21 @@ public class SealConfig {
      */
     public void save(Object configObject) {
         configs.forEach((classe, map) -> map.forEach((file, object) -> {
-           if(configObject == object) {
-               try {
-                   String toSave = unicodeUnescaper.translate(Jankson.builder().build().load(Jankson.builder().build().toJson(configObject).toJson(true, true, 0)).toJson(true, true, 0, 2));
+            if(configObject == object) {
+                try {
+                    String toSave = unicodeUnescaper.translate(Jankson.builder().build().load(Jankson.builder().build().toJson(configObject).toJson(true, true, 0)).toJson(true, true, 0, 2));
 
-                   if (!file.exists()) {
-                       boolean mk = file.getParentFile().mkdirs();
-                       boolean nf = file.createNewFile();
-                   }
+                    if (!file.exists()) {
+                        boolean mk = file.getParentFile().mkdirs();
+                        boolean nf = file.createNewFile();
+                    }
 
-                   FileUtils.write(file, toSave, StandardCharsets.UTF_8);
-               } catch(Exception e) {
-                   logger.severe("Erro ao salvar um arquivo de configuração:");
-                   e.printStackTrace();
-               }
-           }
+                    FileUtils.write(file, toSave, StandardCharsets.UTF_8);
+                } catch(Exception e) {
+                    logger.severe("Erro ao salvar um arquivo de configuração:");
+                    e.printStackTrace();
+                }
+            }
         }));
     }
 
@@ -138,7 +138,7 @@ public class SealConfig {
      * Método utilizado quando a configuração é recarregada.
      *
      * @param configObject o objeto que terá seus valores
-     *                     sobreescritos com os novos.
+     *                     sobrescritos com os novos.
      * @param newObject o objeto com os valores para serem
      *                  definidos no configObject.
      */
@@ -177,7 +177,7 @@ public class SealConfig {
     private JsonObject checkValues(JsonObject defaultObject, JsonObject actualObject, Class<?> configClass) {
         for (Map.Entry<String, JsonElement> entry : defaultObject.entrySet()) {
             if(!actualObject.containsKey(entry.getKey())) actualObject = applyDefaults(defaultObject, actualObject);
-            //Fazer a verificação se o valor não é um JsonObject com valores que precisam ser verificados também
+                //Fazer a verificação se o valor não é um JsonObject com valores que precisam ser verificados também
             else if(actualObject.get(entry.getKey()) instanceof JsonObject) {
                 try {
                     Field field = configClass.getDeclaredField(entry.getKey());
@@ -237,7 +237,7 @@ public class SealConfig {
                 Object obj = field.get(config);
                 if(field.isAnnotationPresent(ConfigObject.class)) {
                     if(configObject.containsKey(field.getName()))
-                       removeClassDefaults(obj, configObject.getObject(field.getName()));
+                        removeClassDefaults(obj, configObject.getObject(field.getName()));
                     continue;
                 }
 
