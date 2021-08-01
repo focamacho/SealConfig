@@ -3,34 +3,6 @@ Seal Config é uma API para criação de arquivos de configuração utilizando [
 
 Para gerar um arquivo de configuração é só criar um novo objeto da classe [SealConfig](https://github.com/Seal-Island/Seal-Config/blob/main/src/main/java/com/focamacho/sealconfig/SealConfig.java) e usar o método getConfig.
 
-**Maven**
-```xml
-<repository>
-    <id>focamacho-repo</id>
-    <name>Focamacho Maven Repository</name>
-    <url>https://repo.focamacho.com/repository/releases/</url>
-</repository>
-```
-```xml
-<dependency>
-    <groupId>com.focamacho</groupId>
-    <artifactId>sealconfig</artifactId>
-    <version>VERSAO</version>
-</dependency>
-```
-
-**Gradle**
-```groovy
-repositories {
-  maven { url = 'https://repo.focamacho.com/repository/releases/' }
-}
-
-dependencies {
-    compile 'com.focamacho:sealconfig:VERSAO'
-}
-```
-Verifique a última versão disponível nos [releases](https://github.com/Seal-Island/Seal-Config/releases) do GitHub.
-
 ## Exemplo
 Exemplo de criação de configuração utilizando a API.
 
