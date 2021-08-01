@@ -1,9 +1,10 @@
 plugins {
     id 'java'
-    id "com.github.johnrengelman.shadow" version "7.0.0"
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
+    id 'maven-publish'
 }
 
-group = 'com.focamacho.sealconfig'
+group = 'com.focamacho'
 version = '1.2.2'
 archivesBaseName = 'SealConfig'
 
@@ -12,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    implementation files("./libs/Jankson-1.2.0.jar")
+    implementation files('./libs/Jankson-1.2.0.jar')
     implementation group: 'commons-io', name: 'commons-io', version: '2.10.0'
     implementation group: 'org.apache.commons', name: 'commons-text', version: '1.9'
     compileOnly group: "com.google.code.findbugs", name: "jsr305", version: "3.0.2"
@@ -31,7 +32,25 @@ tasks.shadowJar.configure {
 }
 
 tasks.withType(JavaCompile) {
-    options.encoding("UTF-8")
+    options.encoding('UTF-8')
 }
 
 jar.enabled = false
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/Seal-Island/Seal-Config")
+            credentials {
+                username = project.user
+                password = project.key
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
+        }
+    }
+}
