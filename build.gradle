@@ -43,8 +43,8 @@ publishing {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/Seal-Island/Seal-Config")
             credentials {
-                username = project.user
-                password = project.key
+                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
             }
         }
     }
