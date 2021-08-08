@@ -1,8 +1,8 @@
 package com.focamacho.sealconfig;
 
-import blue.endless.jankson.Jankson;
-import blue.endless.jankson.JsonElement;
-import blue.endless.jankson.JsonObject;
+import blue.endless.jankson.api.Jankson;
+import blue.endless.jankson.api.element.JsonElement;
+import blue.endless.jankson.api.element.JsonObject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.text.translate.UnicodeUnescaper;
 
