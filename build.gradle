@@ -13,7 +13,10 @@ repositories {
 }
 
 dependencies {
+    //Jankson
     implementation files('./libs/Jankson-2.0.0.jar')
+
+    //Other
     implementation group: 'commons-io', name: 'commons-io', version: '2.10.0'
     implementation group: 'org.apache.commons', name: 'commons-text', version: '1.9'
     compileOnly group: "com.google.code.findbugs", name: "jsr305", version: "3.0.2"
@@ -21,10 +24,11 @@ dependencies {
 
 tasks.build.dependsOn(shadowJar)
 
-//Realocar pacotes para evitar conflitos
+//Relocate packages to avoid conflicts
 shadowJar {
     relocate 'org.apache.commons.text', 'com.focamacho.sealconfig.relocated.org.apache.commons.text'
     relocate 'blue.endless.jankson', 'com.focamacho.sealconfig.relocated.blue.endless.jankson'
+    relocate 'org.yaml.snakeyaml', 'com.focamacho.sealconfig.relocated.org.yaml.snakeyaml'
 }
 
 tasks.shadowJar.configure {

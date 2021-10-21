@@ -28,10 +28,8 @@ package blue.endless.jankson.api;
  * Represents a style of json written out, and a set of quirks to parse going in.
  * Typically you'll want to use a different grammar in than out.
  *
- * Classe modificada para que seja possível quebrar múltiplas
- * linhas entre cada valor no JSON.
- * Classe original disponível em:
- * https://github.com/falkreon/Jankson/blob/master/src/main/java/blue/endless/jankson/JsonGrammar.java
+ * Class modified for allowing the break of multiple lines
+ * between each JSON value.
  */
 public class JsonGrammar {
     /**

@@ -37,10 +37,8 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 /**
- * Classe modificada para que seja possível quebrar múltiplas
- * linhas entre cada valor no JSON.
- * Classe original disponível em:
- * https://github.com/falkreon/Jankson/blob/master/src/main/java/blue/endless/jankson/JsonObject.java
+ * Class modified for allowing the break of multiple lines
+ * between each JSON value.
  */
 public class JsonObject extends JsonElement implements Map<String, JsonElement> {
     /** This pattern matches JsonObject keys that are permitted to appear unquoted */
