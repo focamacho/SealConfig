@@ -3,7 +3,6 @@ package com.focamacho.sealconfig.parser;
 import blue.endless.jankson.api.Jankson;
 import blue.endless.jankson.api.element.JsonElement;
 import blue.endless.jankson.api.element.JsonObject;
-import com.focamacho.sealconfig.ConfigObject;
 import com.focamacho.sealconfig.ConfigParser;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.text.translate.UnicodeUnescaper;
@@ -89,8 +88,8 @@ public class JanksonParser extends ConfigParser {
                 //Fazer a verificação se o valor não é um JsonObject com valores que precisam ser verificados também
             else if(actualObject.get(entry.getKey()) instanceof JsonObject) {
                 try {
-                    Field field = configClass.getDeclaredField(entry.getKey());
-                    if(field.isAnnotationPresent(ConfigObject.class)) {
+                    Field field = configClass.getDeclaredField(entry.getKey());;
+                    if(!field.getType().isAssignableFrom(Map.class)) {
                         actualObject.put(entry.getKey(), checkValues((JsonObject) entry.getValue(), actualObject.getObject(entry.getKey()), field.getType()));
                     }
                 } catch(Exception ignored) {}
@@ -121,7 +120,7 @@ public class JanksonParser extends ConfigParser {
                 if(jsonObject == null) continue;
 
                 Object obj = field.get(config);
-                if(field.isAnnotationPresent(ConfigObject.class)) {
+                if(!field.getType().isAssignableFrom(Map.class)) {
                     if(configObject.containsKey(field.getName()))
                         removeClassDefaults(obj, configObject.getObject(field.getName()));
                     continue;
