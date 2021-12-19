@@ -57,7 +57,7 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 }
 
 shadowJar {
-    archiveFileName = "$archiveBaseName-$archiveVersion.$archiveExtension"
+    getArchiveFileName().set("${archiveBaseName.get()}-${archiveVersion.get()}.${archiveExtension.get()}")
 }
 
 artifacts {
