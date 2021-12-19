@@ -1,4 +1,4 @@
-# Seal Config
+# Seal Config [![](https://jitpack.io/v/seal-island/sealconfig.svg)](https://jitpack.io/#seal-island/sealconfig)
 Seal Config is an API for creating config files. At the moment it supports only [Jankson](https://github.com/falkreon/Jankson).
 
 To create a new config file you only need to create a new instance of the class [SealConfig](https://github.com/Seal-Island/Seal-Config/blob/main/src/main/java/com/focamacho/sealconfig/SealConfig.java), and use the method getConfig.
