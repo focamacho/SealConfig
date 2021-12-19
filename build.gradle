@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.focamacho'
-version = '1.3.0'
+version = '1.4.0'
 archivesBaseName = 'SealConfig'
 
 repositories {
@@ -47,17 +47,17 @@ javadoc {
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
+    archiveClassifier.set('sources')
     from sourceSets.main.allSource
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
+    archiveClassifier.set('javadoc')
     from javadoc.destinationDir
 }
 
 shadowJar {
-    archiveName = "$baseName-$version.$extension"
+    archiveFileName = "$archiveBaseName-$archiveVersion.$archiveExtension"
 }
 
 artifacts {
