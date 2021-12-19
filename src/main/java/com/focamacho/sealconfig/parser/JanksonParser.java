@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+@SuppressWarnings({"unused", "unchecked"})
 public class JanksonParser extends ConfigParser {
 
     private static final UnicodeUnescaper unicodeUnescaper = new UnicodeUnescaper();
@@ -27,7 +28,7 @@ public class JanksonParser extends ConfigParser {
         configs.forEach((classe, map) -> map.forEach((file, object) -> {
             if(configObject == object) {
                 try {
-                    String toSave = unicodeUnescaper.translate(Jankson.builder().build().load(Jankson.builder().build().toJson(configObject).toJson(true, true, 0)).toJson(true, true, 0, 2));
+                    String toSave = unicodeUnescaper.translate(Jankson.builder().build().load(Jankson.builder().build().toJson(configObject).toJson(true, true)).toJson(true, true, 0, 2));
 
                     if (!file.exists()) {
                         boolean mk = file.getParentFile().mkdirs();
@@ -46,7 +47,7 @@ public class JanksonParser extends ConfigParser {
     @Override
     protected <T> T createConfig(File configFile, Class<T> configClass) {
         try {
-            JsonObject defaults = Jankson.builder().build().load(Jankson.builder().build().toJson(configClass.newInstance()).toJson(true, true, 0));
+            JsonObject defaults = Jankson.builder().build().load(Jankson.builder().build().toJson(configClass.getConstructor().newInstance()).toJson(true, true));
 
             JsonObject configObject;
             if (!configFile.exists()) {
@@ -88,7 +89,7 @@ public class JanksonParser extends ConfigParser {
             //Check if the value is not a JsonObject that also needs to be check
             else if(actualObject.get(entry.getKey()) instanceof JsonObject) {
                 try {
-                    Field field = configClass.getDeclaredField(entry.getKey());;
+                    Field field = configClass.getDeclaredField(entry.getKey());
                     if(!field.getType().isAssignableFrom(Map.class)) {
                         actualObject.put(entry.getKey(), checkValues((JsonObject) entry.getValue(), actualObject.getObject(entry.getKey()), field.getType()));
                     }

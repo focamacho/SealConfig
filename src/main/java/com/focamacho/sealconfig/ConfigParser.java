@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+@SuppressWarnings("unchecked")
 public abstract class ConfigParser {
 
     protected final Logger logger;

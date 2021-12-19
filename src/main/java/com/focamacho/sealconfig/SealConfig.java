@@ -6,6 +6,7 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Logger;
 
+@SuppressWarnings("unused")
 public class SealConfig {
 
     protected static final Logger logger = Logger.getLogger("SealConfig");
