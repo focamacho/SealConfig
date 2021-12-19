@@ -10,11 +10,12 @@ archivesBaseName = 'SealConfig'
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
     //Jankson
-    implementation files('./libs/Jankson-2.0.0.jar')
+    implementation 'com.github.falkreon:Jankson:b520ee8e55'
 
     //Other
     implementation group: 'commons-io', name: 'commons-io', version: '2.10.0'
