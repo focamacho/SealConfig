@@ -30,7 +30,8 @@ public class ObjectExample {
     @ConfigObject
     public CategoryExample category = new CategoryExample();
     
-    static class CategoryExample {
+    //Needs to be public
+    public static class CategoryExample {
         
         @Comment("Result of what?")
         public int result = 20;
