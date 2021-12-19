@@ -3,6 +3,38 @@ Seal Config is an API for creating config files. At the moment it supports only 
 
 To create a new config file you only need to create a new instance of the class [SealConfig](https://github.com/Seal-Island/Seal-Config/blob/main/src/main/java/com/focamacho/sealconfig/SealConfig.java), and use the method getConfig.
 
+## First Steps
+To start using the API, you'll need to setup the dependency in your project. Here is some examples for Gradle and Maven:
+<br>
+Do not forget to replace *VERSION* with the desired version of the API. Check what is the latest version in the [releases](https://github.com/Seal-Island/SealConfig/releases) tab.
+
+**Maven**
+```xml
+<repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+</repository>
+```
+```xml
+<dependency>
+    <groupId>com.github.seal-island</groupId>
+    <artifactId>sealconfig</artifactId>
+    <version>VERSION</version>
+</dependency>
+```
+
+**Gradle**
+```groovy
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    implementation 'com.github.seal-island:sealconfig:VERSION'
+}
+```
+
+
 ## Example
 Example of a config file using the API.
 
