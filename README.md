@@ -1,48 +1,48 @@
 # Seal Config
-Seal Config é uma API para criação de arquivos de configuração utilizando [Jankson](https://github.com/falkreon/Jankson).
+Seal Config is an API for creating config files. At the moment it supports only [Jankson](https://github.com/falkreon/Jankson).
 
-Para gerar um arquivo de configuração é só criar um novo objeto da classe [SealConfig](https://github.com/Seal-Island/Seal-Config/blob/main/src/main/java/com/focamacho/sealconfig/SealConfig.java) e usar o método getConfig.
+To create a new config file you only need to create a new instance of the class [SealConfig](https://github.com/Seal-Island/Seal-Config/blob/main/src/main/java/com/focamacho/sealconfig/SealConfig.java), and use the method getConfig.
 
-## Exemplo
-Exemplo de criação de configuração utilizando a API.
+## Example
+Example of a config file using the API.
 
-Classe da configuração:
+Config class:
 ```java
-//Para evitar conflitos com as mudanças efetuadas, os pacotes
-//do Jankson foram realocados.
+//To avoid conflicts with the changes made, the Jankson
+//packages was relocated.
 import com.focamacho.sealconfig.relocated.blue.endless.jankson.Comment;
 
 public class ObjectExample {
 
-    //Anotações de comentário do Jankson podem ser utilizados para
-    //definir comentários nas configurações.
-    @Comment("Defina seu nome aqui.")
-    public String meuNome = "Focamacho";
+    //You can use the @Comment annotation for adding comments
+    //to your config file.
+    @Comment("Set your name here.")
+    public String myName = "Focamacho";
     
-    @Comment("Defina aqui qual número é foda.")
-    public int numeroFoda = 0;
+    @Comment("Set here a cool number.")
+    public int coolNumber = 0;
     
-    //Você pode definir objetos para serem usados como "categorias"
-    //por meio da anotação @ConfigObject
-    @Comment("Isso aqui é uma categoria :p\n" +
-            "E que tal alguns comentários maiorzinhos?\n" +
-            "Parece bom pra mim!")
+    //You can set objects to be used as "categories"
+    //inside your config file.
+    @Comment("This is a category :p\n" +
+            "And also a multiple lines comment\n" +
+            "Do you like it?!")
     @ConfigObject
-    public CategoryExample categoria = new CategoryExample();
+    public CategoryExample category = new CategoryExample();
     
     static class CategoryExample {
         
-        @Comment("Resultado do que?")
-        public int resultado = 20;
+        @Comment("Result of what?")
+        public int result = 20;
         
-        @Comment("Oi!")
-        public String oi = "olá!";
+        @Comment("Hi!")
+        public String hi = "hello!";
         
     }
 
 }
 ```
-Classe para carregamento e manipulação da configuração:
+Class for loading the config:
 ```java
 import java.io.File;
 
@@ -52,56 +52,56 @@ public class ConfigExample {
     public static ObjectExample config;
     
     public static void loadConfig() {
-        //Cria uma instância da Seal Config
+        //Create a new instance of the SealConfig. You only need to do it one time.
         sealConfig = new SealConfig();
-        //Cria ou carrega a configuração. O primeiro argumento é o arquivo de configuração, e o segundo a classe da configuração.
-        config = sealConfig.getConfig(new File("./config/ConfigExemplo.json"), ObjectExample.class);
+        //Create or reload a config. The first parameters is the config file, and the second the config class.
+        config = sealConfig.getConfig(new File("./config/ConfigExample.json5"), ObjectExample.class);
 
-        //Para acessar a config é só utilizar o objeto criado pelo getConfig.
-        System.out.println("Meu nome é " + config.meuNome + " e o número mais foda é o " + config.numeroFoda);
+        //To access the config, you only need to use the object created using getConfig.
+        System.out.println("My name is " + config.myName + " and the coolest number is " + config.coolNumber);
 
-        //Para modificar a configuração é só alterar os valores no objeto.
-        config.meuNome = "Foca";
-        config.numeroFoda = 10;
-        System.out.println("Meu nome é " + config.meuNome + " e o número mais foda é o " + config.numeroFoda);
+        //To modify the config, just change the values.
+        config.myName = "Foca";
+        config.coolNumber = 10;
+        System.out.println("My name is " + config.myName + " and the coolest number is " + config.coolNumber);
 
-        //Não esqueça de salvar caso altere os valores!
+        //If you change the values, do not forget to save! You don't need to save otherwise.
         saveConfig();
     }
     
     public static void reloadConfig() {
-        //Para recarregar a config é só utilizar o método SealConfig#reload.
+        //To reload the config, you can use SealConfig#reload.
         sealConfig.reload();
     }
     
     public static void saveConfig() {
-        //Para salvar você pode optar por salvar todas as configurações criadas usando SealConfig#save.
+        //You can save all the created configs using SealConfig#save.
         sealConfig.save();
-        //ou salvar uma configuração específica passando o objeto dela no método
+        //if you pass a config object to it, it will only save the config inserted
         sealConfig.save(config);
     }
     
 }
 ```
-JSON resultante da classe ObjectExample:
+Resulting JSON:
 ```json5
 {
-	// Defina seu nome aqui.
-	"meuNome": "Focamacho",
+  // Set your name here.
+  "myName": "Foca",
 
-	// Defina aqui qual número é foda.
-	"numeroFoda": 0,
+  // Set here a cool number.
+  "coolNumber": 10,
 
-	/* Isso aqui é uma categoria :p
-	   E que tal alguns comentários maiorzinhos?
-	   Parece bom pra mim!
-	*/
-	"categoria": {
-		// Resultado do que?
-		"resultado": 20,
+  /* This is a category :p
+     And also a multiple lines comment
+     Do you like it?!
+  */
+  "category": {
+    // Result of what?
+    "result": 20,
 
-		// Oi!
-		"oi": "olá!"
-	}
+    // Hi!
+    "hi": "hello!"
+  }
 }
 ```
