@@ -42,7 +42,8 @@ public abstract class ConfigParser {
             for(Field field : configObject.getClass().getFields()) {
                 for(Field newField : newObject.getClass().getFields()) {
                     if(field.getName().equalsIgnoreCase(newField.getName())) {
-                        if(!field.getType().isAssignableFrom(Map.class)) {
+                        Class<?> fieldType = field.getType();
+                        if(fieldType.isAssignableFrom(Object.class) && !fieldType.isAssignableFrom(String.class) && !fieldType.isAssignableFrom(Map.class)) {
                             setValues(field.get(configObject), newField.get(newObject));
                         } else {
                             field.set(configObject, newField.get(newObject));

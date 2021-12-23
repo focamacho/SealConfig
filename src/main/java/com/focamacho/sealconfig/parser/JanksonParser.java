@@ -90,7 +90,8 @@ public class JanksonParser extends ConfigParser {
             else if(actualObject.get(entry.getKey()) instanceof JsonObject) {
                 try {
                     Field field = configClass.getDeclaredField(entry.getKey());
-                    if(!field.getType().isAssignableFrom(Map.class)) {
+                    Class<?> fieldType = field.getType();
+                    if(fieldType.isAssignableFrom(Object.class) && !fieldType.isAssignableFrom(String.class) && !fieldType.isAssignableFrom(Map.class)) {
                         actualObject.put(entry.getKey(), checkValues((JsonObject) entry.getValue(), actualObject.getObject(entry.getKey()), field.getType()));
                     }
                 } catch(Exception ignored) {}
