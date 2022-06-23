@@ -5,12 +5,12 @@ import blue.endless.jankson.api.element.JsonElement;
 import blue.endless.jankson.api.element.JsonObject;
 import com.focamacho.sealconfig.ConfigParser;
 import com.focamacho.sealconfig.annotation.ConfigCategory;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.text.translate.UnicodeUnescaper;
 
 import java.io.File;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,7 +40,7 @@ public class JanksonParser extends ConfigParser {
                         boolean nf = file.createNewFile();
                     }
 
-                    FileUtils.write(file, toSave, StandardCharsets.UTF_8);
+                    Files.write(file.toPath(), toSave.getBytes(StandardCharsets.UTF_8));
                 } catch(Exception e) {
                     logger.severe("Error saving a config file:");
                     e.printStackTrace();
@@ -64,7 +64,7 @@ public class JanksonParser extends ConfigParser {
                 configObject = checkValues(defaults, configObject, configClass);
             }
 
-            FileUtils.write(configFile, unicodeUnescaper.translate(configObject.toJson(true, true, 0, 2)), StandardCharsets.UTF_8);
+            Files.write(configFile.toPath(), unicodeUnescaper.translate(configObject.toJson(true, true, 0, 2)).getBytes(StandardCharsets.UTF_8));
             T config = jankson.fromJson(configObject.toJson(), configClass);
 
             Map<File, Object> configs = this.configs.get(configClass);

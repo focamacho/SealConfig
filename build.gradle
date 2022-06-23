@@ -18,7 +18,6 @@ dependencies {
     implementation 'com.github.falkreon:Jankson:b520ee8e55'
 
     //Other
-    implementation group: 'commons-io', name: 'commons-io', version: '2.10.0'
     implementation group: 'org.apache.commons', name: 'commons-text', version: '1.9'
     compileOnly group: "com.google.code.findbugs", name: "jsr305", version: "3.0.2"
 }
