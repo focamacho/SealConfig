@@ -59,7 +59,6 @@ public class ObjectExample {
     @Comment("This is a category :p\n" +
             "And also a multiple lines comment\n" +
             "Do you like it?!")
-    @ConfigObject
     public CategoryExample category = new CategoryExample();
     
     //Needs to be public
