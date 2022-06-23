@@ -43,6 +43,7 @@ Config class:
 //To avoid conflicts with the changes made, the Jankson
 //packages was relocated.
 import com.focamacho.sealconfig.relocated.blue.endless.jankson.Comment;
+import com.focamacho.sealconfig.annotation.ConfigCategory;
 
 public class ObjectExample {
 
@@ -61,7 +62,10 @@ public class ObjectExample {
             "Do you like it?!")
     public CategoryExample category = new CategoryExample();
     
-    //Needs to be public
+    //Needs to be public and requires the ConfigCategory annotation.
+    //This annotation is to make sure that the instances of this class will
+    //have his fields reloaded/re-added to the json file.
+    @ConfigCategory
     public static class CategoryExample {
         
         @Comment("Result of what?")
