@@ -13,8 +13,8 @@ public abstract class ConfigParser {
     protected final Map<Class<?>, Map<File, Object>> configs = new HashMap<>();
 
     //You can't instantiate this class
-    protected ConfigParser(Logger logger) {
-        this.logger = logger;
+    protected ConfigParser() {
+        this.logger = SealConfig.logger;
     }
 
     <T> T getConfig(File configFile, Class<T> classe) {

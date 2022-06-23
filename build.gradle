@@ -29,8 +29,6 @@ tasks.build.dependsOn(shadowJar)
 shadowJar {
     relocate 'org.apache.commons.text', 'com.focamacho.sealconfig.relocated.org.apache.commons.text'
     relocate 'blue.endless.jankson', 'com.focamacho.sealconfig.relocated.blue.endless.jankson'
-    relocate 'org.yaml.snakeyaml', 'com.focamacho.sealconfig.relocated.org.yaml.snakeyaml'
-
     minimize()
 }
 

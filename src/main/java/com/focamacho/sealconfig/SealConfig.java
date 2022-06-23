@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 @SuppressWarnings("unused")
 public class SealConfig {
 
-    protected static final Logger logger = Logger.getLogger("SealConfig");
+    static final Logger logger = Logger.getLogger("SealConfig");
     private final ConfigParser parser;
 
     /**
@@ -28,7 +28,7 @@ public class SealConfig {
     public SealConfig(Class<? extends ConfigParser> parser) {
         ConfigParser configParser = null;
         try {
-            configParser = (ConfigParser) parser.getConstructors()[0].newInstance(logger);
+            configParser = (ConfigParser) parser.getConstructors()[0].newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             logger.severe("Invalid Parser class.");
             e.printStackTrace();
