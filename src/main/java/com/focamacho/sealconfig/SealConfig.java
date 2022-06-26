@@ -28,8 +28,8 @@ public class SealConfig {
     public SealConfig(Class<? extends ConfigParser> parser) {
         ConfigParser configParser = null;
         try {
-            configParser = (ConfigParser) parser.getConstructors()[0].newInstance();
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            configParser = parser.getConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             logger.severe("Invalid Parser class.");
             e.printStackTrace();
         }
