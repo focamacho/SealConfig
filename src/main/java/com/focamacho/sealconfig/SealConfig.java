@@ -23,7 +23,7 @@ public class SealConfig {
     /**
      * Creates a new instance of Seal Config.
      *
-     * @param parser the Config Parser to be used.
+     * @param parser the Config Parser class to be used.
      */
     public SealConfig(Class<? extends ConfigParser> parser) {
         ConfigParser configParser = null;
@@ -34,6 +34,15 @@ public class SealConfig {
             e.printStackTrace();
         }
         this.parser = configParser;
+    }
+
+    /**
+     * Creates a new instance of Seal Config.
+     *
+     * @param parser the Config Parser to be used.
+     */
+    public SealConfig(ConfigParser parser) {
+        this.parser = parser;
     }
 
     /**
