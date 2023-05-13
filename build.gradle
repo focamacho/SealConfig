@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.focamacho'
-version = '1.4.4'
+version = '1.4.5'
 archivesBaseName = 'SealConfig'
 
 repositories {

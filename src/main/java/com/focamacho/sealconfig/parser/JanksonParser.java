@@ -91,7 +91,7 @@ public class JanksonParser extends ConfigParser {
     private JsonObject checkValues(JsonObject defaultObject, JsonObject actualObject, Class<?> configClass) {
         for (Map.Entry<String, JsonElement> entry : defaultObject.entrySet()) {
             if(!actualObject.containsKey(entry.getKey())) actualObject = applyDefaults(defaultObject, actualObject);
-            //Check if the value is not a JsonObject that also needs to be check
+                //Check if the value is not a JsonObject that also needs to be check
             else if(actualObject.get(entry.getKey()) instanceof JsonObject) {
                 try {
                     Field field = configClass.getDeclaredField(entry.getKey());
@@ -127,13 +127,10 @@ public class JanksonParser extends ConfigParser {
                 if(jsonObject == null) continue;
 
                 Object obj = field.get(config);
-                if(!field.getType().isAssignableFrom(Map.class)) {
+                if(!(obj instanceof Map)) {
                     if(configObject.containsKey(field.getName()))
                         removeClassDefaults(obj, configObject.getObject(field.getName()));
-                    continue;
-                }
-
-                if(obj instanceof Map) {
+                } else {
                     Map<String, ?> map = (Map<String, ?>) obj;
                     map.entrySet().removeIf(entry -> !jsonObject.containsKey(entry.getKey()));
                 }
